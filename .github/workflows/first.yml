@@ -15,4 +15,4 @@ jobs:
                 cat README.md
             
             - name: Generate ASCII Artwork
-              run: cowsay -f dragon "Run for cover, I am a DRAGON....RAWR" >> dragon.txt     
+              run: cowsay -f fairy "Run for cover, I am a FAIRY....RAWR" >> fairy.txt     
