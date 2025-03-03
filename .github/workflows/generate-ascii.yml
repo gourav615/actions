@@ -1,17 +1,69 @@
+# name: Generate ASCII Artwork
+# on: 
+#   push
+# jobs:
+#   build_job_1:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: install Cowsay Program
+#         run: sudo apt-get install cowsay -y
+
+#       - name: Execute Cowsay CMD
+#         run: cowsay -f dragon "Run for cover, I am a DRAGON....RAWR" >> dragon.txt
+        
+#       - name: upload Dragon text file
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: dragon-text-file 
+#           path: dragon.txt
+
+#   test_job_2:
+#     needs: build_job_1
+#     runs-on: ubuntu-latest
+#     steps: 
+#     - name: Download Dragon test file
+#       uses: actions/download-artifact@v4
+#       with:
+#         name: dragon-text-file
+#         path: .
+       
+#     - name: Test file Exists
+#       run: grep -i "dragon" dragon.txt 
+        
+#   deploy_job_3:
+#     needs: [test_job_2]
+#     runs-on: Ubuntu-latest
+#     steps:
+#     - name: Download Dragon text file
+#       uses: actions/download-artifact@v4
+#       with:
+#         name: dragon-text-file
+#         path: .
+      
+#     - name: Read file
+#       run: cat dragon.txt
+      
+#     - name: Deploy 
+#       run: echo Deploying ... .. .  
+
 name: Generate ASCII Artwork
 on: 
   push
+
 jobs:
   build_job_1:
     runs-on: ubuntu-latest
     steps:
-      - name: install Cowsay Program
+      - name: Update Package Lists
+        run: sudo apt-get update
+
+      - name: Install Cowsay Program
         run: sudo apt-get install cowsay -y
 
       - name: Execute Cowsay CMD
         run: cowsay -f dragon "Run for cover, I am a DRAGON....RAWR" >> dragon.txt
         
-      - name: upload Dragon text file
+      - name: Upload Dragon text file
         uses: actions/upload-artifact@v4
         with:
           name: dragon-text-file 
@@ -21,26 +73,27 @@ jobs:
     needs: build_job_1
     runs-on: ubuntu-latest
     steps: 
-    - name: Download Dragon test file
-      uses: actions/download-artifact@v4
-      with:
-        name: dragon-text-file
-        path: dragon.txt
-       
-    - name: Test file Exists
-      run: grep -i "dragon" dragon.txt 
-        
+      - name: Download Dragon text file
+        uses: actions/download-artifact@v4
+        with:
+          name: dragon-text-file
+          path: .
+
+      - name: Test file Exists
+        run: cat dragon.txt && grep -i "dragon" dragon.txt 
+
   deploy_job_3:
-    needs: [test_job_2]
-    runs-on: Ubuntu-latest
+    needs: test_job_2
+    runs-on: ubuntu-latest
     steps:
-    - name: Download Dragon text file
-      uses: actions/download-artifact@v4
-      with:
-        name: dragon-text-file
+      - name: Download Dragon text file
+        uses: actions/download-artifact@v4
+        with:
+          name: dragon-text-file
+          path: .
+
+      - name: Read file
+        run: cat dragon.txt
       
-    - name: Read file
-      run: cat dragon.txt
-      
-    - name: Deploy 
-      run: echo Deploying ... .. .  
+      - name: Deploy
+        run: echo "Deploying ... .. ."
