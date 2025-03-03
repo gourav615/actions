@@ -22,13 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
     - name: Download Dragon test file
-      uses: actions/upload-artifact@v3
+      uses: actions/download-artifact@v3
       with:
         name: dragon-text-file
         path: dragon.txt
        
     - name: Test file Exists
-      run: grep -i "dragon" dragon.tst 
+      run: grep -i "dragon" dragon.txt 
         
   deploy_job_3:
     needs: [test_job_2]
