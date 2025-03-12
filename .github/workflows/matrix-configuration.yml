@@ -1,3 +1,5 @@
+#########first-time #####################################
+
 # name: Matrix Configuration
 # on:
 #   push: null
@@ -19,20 +21,54 @@
 #       - name: Run Images
 #         run: docker run hello-world
 
-########################################################
+##################second-time ######################################
 
+
+# name: Matrix Configuration
+# on:
+#   push: null
+#   workflow_dispatch: 
+
+# jobs:
+#   deploy:
+#      strategy:
+#         matrix:
+#           os: [ubuntu-latest, ubuntu-20.04, windows-latest]
+#           images: [hello-world, alpine]
+
+#      runs-on: ${{ matrix.os }}
+#      steps:
+#      - name: Echo Docker Details
+#        run: docker info
+
+#      - name: Run Images on ${{matrix.os}}
+#        run: docker run ${{matrix.images}}
+
+################# third-time ############################################################
+ 
 
 name: Matrix Configuration
 on:
-  push: null
+  push: 
   workflow_dispatch: 
 
 jobs:
   deploy:
      strategy:
+        fail-fast: false
+        max-parallel: 2
+
         matrix:
           os: [ubuntu-latest, ubuntu-20.04, windows-latest]
           images: [hello-world, alpine]
+          exclude:
+            - images: alpine
+              os: window-latest
+              
+          include:
+            - images: amd64/alpine
+              os: ubuntu-20.04
+                
 
      runs-on: ${{ matrix.os }}
      steps:
@@ -41,8 +77,6 @@ jobs:
 
      - name: Run Images on ${{matrix.os}}
        run: docker run ${{matrix.images}}
-
- 
 
 
 
